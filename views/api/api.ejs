@@ -1,0 +1,47 @@
+<%-include('../includes/head.ejs')%>
+        <title><%=docTitle%></title>
+    </head>
+    <body>
+        <%-include('../includes/navigation.ejs')%>
+        <div class="jumbotron">
+            <div class="container">
+                <h1 class="display-4"><%=docTitle%></h1>
+            </div>
+        </div>
+        <div class="container">
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title">Add Product</h5>
+                    <form>
+                        <div class="form-group">
+                            <label for="productTitleId">Title</label>
+                            <input type="text" class="form-control" id="productTitleId" aria-describedby="productTitleHelp" placeholder="Enter Product Title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productDescriptionId">Description</label>
+                            <input type="text" class="form-control" id="productDescriptionId" aria-describedby="productDescriptionHelp" placeholder="Enter Product Description" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productPriceId">Price</label>
+                            <input type="number" class="form-control" id="productPriceId" aria-describedby="productPriceHelp" placeholder="Enter Product Price" required>
+                        </div>
+                        <button type="button" class="btn btn-primary" id="postProductId">Submit</button>
+                    </form>
+                </div>
+                <div class="card-footer text-muted" id="resultProductId">
+                    SUBMIT a new product to the list of products.
+                </div>
+            </div>
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title">List All Products</h5>
+                    <p class="card-text">The following button click triggers a GET REST API to fetch all products.</p>
+                    <button type="button" class="btn btn-primary" id="getProductsId">GET PRODUCTS</button>
+                </div>
+                <div class="card-footer text-muted" id="resultProductsId">
+                    Click GET PRODUCTS to see the result.
+                </div>
+            </div>    
+        </div>
+<%-include('../includes/end.ejs')%>
+<script src="/js/api.js"></script>

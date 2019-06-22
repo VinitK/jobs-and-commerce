@@ -1,0 +1,58 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">MOMnPOP</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item <%=docTitle === 'Home' ? 'active' : ''%>">
+        <a class="nav-link" href="/">Home</a>
+      </li>
+      <li class="nav-item <%=docTitle === 'Products' ? 'active' : ''%>">
+        <a class="nav-link" href="/products">Products</a>
+      </li>
+      <li class="nav-item <%=docTitle === 'My Cart' ? 'active' : ''%>">
+        <a class="nav-link" href="/cart">My Cart</a>
+      </li>
+      <li class="nav-item <%=docTitle === 'Orders' ? 'active' : ''%>">
+        <a class="nav-link" href="/orders">Orders</a>
+      </li>
+      <li class="nav-item <%=docTitle === 'Add Product' ? 'active' : ''%>">
+        <a class="nav-link" href="/admin/add-product">Add Product</a>
+      </li>
+      <li class="nav-item <%=docTitle === 'My Store' ? 'active' : ''%>">
+        <a class="nav-link" href="/admin/products">My Store</a>
+      </li>
+      <li class="nav-item <%=docTitle === 'fAIce' ? 'active' : ''%>">
+        <a class="nav-link" href="/api/faice">fAIce</a>
+      </li>
+      <li class="nav-item <%=docTitle === 'CVFY' ? 'active' : ''%>">
+        <a class="nav-link" href="/cvfy">CVFY</a>
+      </li>
+      <li class="nav-item <%=docTitle === '404' ? 'active' : ''%>">
+        <a class="nav-link" href="/404">404</a>
+      </li>
+      <li class="nav-item <%=docTitle === '500' ? 'active' : ''%>">
+        <a class="nav-link" href="/500">500</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav mr-auto">
+      <% if (isLoggedIn) { %>
+        <li class="nav-item">
+          <form action="/logout" method="POST">
+            <input type="hidden" name="_csrf" value=<%= csrfToken %>>
+            <button type="submit" class="btn btn-link">Logout</button>
+          </form>
+        </li>
+      <% } else { %>
+        <li class="nav-item <%=docTitle === 'Login' ? 'active' : ''%>">
+          <a class="nav-link" href="/login">Log in</a>
+        </li>
+        <li class="nav-item <%=docTitle === 'Signup' ? 'active' : ''%>">
+          <a class="nav-link" href="/signup">Sign up</a>
+        </li>
+      <% } %>
+    </ul>
+  </div>
+</nav>

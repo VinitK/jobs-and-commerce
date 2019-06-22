@@ -1,0 +1,26 @@
+    <%-include('../includes/head.ejs')%>
+        <title><%=docTitle%></title>
+        <script defer src="/js/face-api.min.js"></script>
+        <script defer src="/js/faice.js"></script>
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                width: 100vw;
+                height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            canvas {
+                position: absolute;
+            }
+        </style>
+    </head>
+    <body>
+        <a class="btn btn-outline-primary m-2" href="/"><</a>
+        <video id="video" width="720" height="560" autoplay muted></video>
+        <a class="btn btn-outline-primary m-2" href="/">></a>
+    </body>
+</html>

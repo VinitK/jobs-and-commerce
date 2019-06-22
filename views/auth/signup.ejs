@@ -1,0 +1,40 @@
+<%-include('../includes/head.ejs')%>
+        <title><%=docTitle%></title>
+    </head>
+    <body>
+        <%-include('../includes/navigation.ejs')%>
+        <div class="jumbotron">
+            <div class="container">
+                <h1><%=docTitle%></h1>
+            </div>
+        </div>
+        <div class="container">
+            <div class="col-sm-4 offset-sm-4">
+                <form action="/signup" method="POST">
+                    <% if (errorMessage) { %>
+                        <div class="alert alert-warning" role="alert">
+                            <%=errorMessage%>
+                        </div>
+                    <% } %>
+                    <div class="form-group">
+                        <label for="name">First Name</label>
+                        <input type="text" class="form-control" name="name" value="<%= input.name %>" style="border-color: <%= validationErrors.find(e => e.param==='name') ? 'red;' : 'non;e' %>">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" name="email" value="<%= input.email %>" style="border-color: <%= validationErrors.find(e => e.param==='email') ? 'red;' : 'none;' %>">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" name="password" value="<%= input.password %>" style="border-color: <%= validationErrors.find(e => e.param==='password') ? 'red;' : 'none;' %>">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" class="form-control" name="confirmPassword" value="<%= input.confirmPassword %>" style="border-color: <%= validationErrors.find(e => e.param==='confirmPassword') ? 'red;' : 'none;' %>">
+                    </div>
+                    <input type="hidden" name="_csrf" value=<%= csrfToken %>>
+                    <button type="submit" class="btn btn-primary">Signup</button>
+                </form>
+            </div>
+        </div>
+<%-include('../includes/end.ejs')%>

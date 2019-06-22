@@ -1,0 +1,50 @@
+<%-include('../includes/head.ejs')%>
+        <title><%=docTitle%></title>
+    </head>
+    <body>
+        <%-include('../includes/navigation.ejs')%>
+        <div class="jumbotron">
+            <div class="container">
+                <h1 class="display-4"><%=docTitle%></h1>
+            </div>
+        </div>
+        <div class="container">
+        <%if (products.length > 0) {%>
+            <div class="row">
+            <%for (let product of products) {%>
+                <div class="col-sm-4">
+                    <div class="card mt-4" style="width: 18rem;">
+                        <div class="card-body">
+                            <img class="card-img-top" src="/<%=product.imageUrl%>" alt="Card image cap">
+                            <h5 class="card-title mt-2"><%=product.title%></h5>
+                            <p class="card-text"><%=product.description%></p>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <a href="/admin/edit-product/<%=product._id%>?edit=true" class="btn btn-outline-secondary btn-block">Edit</a>
+                                </div>
+                                <div class="col-sm-6">
+                                    <input type="hidden" name="productId" value="<%=product._id%>">
+                                    <input type="hidden" name="_csrf" value=<%= csrfToken %>>
+                                    <button type="button" onclick="deleteProduct(this)" class="btn btn-outline-danger btn-block">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer text-muted">
+                            Rs. <%=product.price%>
+                        </div>
+                    </div>
+                </div>
+            <%}%>
+            </div>
+            <%-include('../includes/pagination.ejs')%>
+        <%} else {%>
+            <div class="text-center">
+                <h5>Your store is empty.</h5>
+                <div class="mt-4">
+                    <a href="/admin/add-product" class="btn btn-outline-primary">Add New Product</a>
+                </div>
+            </div>
+        <%}%>
+        </div>
+<%-include('../includes/end.ejs')%>
+<script src="/js/admin.js"></script>

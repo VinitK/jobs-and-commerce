@@ -1,0 +1,45 @@
+<%-include('../includes/head.ejs')%>
+        <title><%=docTitle%></title>
+    </head>
+    <body>
+        <%-include('../includes/navigation.ejs')%>
+        <div class="jumbotron">
+            <div class="container">
+                <h1 class="display-4"><%=docTitle%></h1>
+            </div>
+        </div>
+        <div class="container">
+            <div class="col-sm-4 offset-sm-4">
+                <% if (errorMessage) { %>
+                    <div class="alert alert-warning" role="alert">
+                        <%= errorMessage %>
+                    </div>
+                <% } %>
+                <form action="<% if (editing==='true') { %>/admin/edit-product<% } else { %>/admin/add-product<% } %>" method="POST" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input type="text" class="form-control" name="title" value="<% if (editing==='true' || hasError) { %><%=product.title%><% } %>" style="border-color: <%= validationErrors.find(e => e.param==='title') ? 'red;' : 'none;' %>">
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea class="form-control" rows="5" name="description" style="border-color: <%= validationErrors.find(e => e.param==='description') ? 'red;' : 'none;' %>"><% if (editing==='true' || hasError) { %><%=product.description%><% } %></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="price">Price</label>
+                        <input type="number" step="0.01" class="form-control" name="price" value="<% if (editing==='true' || hasError) { %><%=product.price%><% } %>" style="border-color: <%= validationErrors.find(e => e.param==='price') ? 'red;' : 'none;' %>">
+                    </div>
+                    <div class="form-group">
+                        <input type="file" name="image">
+                    </div>
+                    <!-- Start Hidden Inputs -->
+                    <% if (editing==='true') { %>
+                        <input type="hidden" name="productId" value="<%=product._id%>">
+                    <% } %>
+                    <input type="hidden" name="_csrf" value=<%= csrfToken %>>
+                    <!-- End Hidden Inputs -->
+                    <button type="submit" class="btn btn-primary"><% if (editing==='true') { %>Update<% } else { %>Save<% } %></button>
+                    <a href="/admin/products" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+<%-include('../includes/end.ejs')%>

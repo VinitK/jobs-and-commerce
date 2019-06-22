@@ -1,0 +1,17 @@
+<%-include('includes/head.ejs')%>
+        <title><%=docTitle%></title>
+    </head>
+    <body>
+        <%-include('includes/navigation.ejs')%>
+        <div class="jumbotron">
+            <div class="container text-center">
+                <h1 class="display-1"><%=docTitle%></h1>
+                <h2 class="display-4">Something is wrong</h2>
+                <p>We are working on this issue. Sorry for the inconvenience.</p>
+                <div class="m-4">
+                    <a href="/" class="btn btn-primary">Home</a>
+                </div>
+                <p><%= error %></p>
+            </div>
+        </div>
+<%-include('includes/end.ejs')%>

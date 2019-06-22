@@ -1,0 +1,65 @@
+<%-include('../includes/head.ejs')%>
+        <title><%=docTitle%></title>
+    </head>
+    <body>
+        <%-include('../includes/navigation.ejs')%>
+        <div class="jumbotron">
+            <div class="container">
+                <h1 class="display-4"><%=docTitle%></h1>
+            </div>
+        </div>
+        <div class="container">
+            <%if (products.length > 0) {%>
+                <div class="row">
+                <% products.forEach(p => { %>
+                    <div class="col-sm-4">
+                        <div class="card mt-4" style="width: 18rem;">
+                            <div class="card-header text-muted">
+                                <div class="row">
+                                    <div class="col-sm-8">
+                                        <span class="align-middle">Qty: <%=p.quantity%></span>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <form action="/cart" method="POST">
+                                            <input type="hidden" name="productId" value="<%=p.productId._id%>">
+                                            <div class="btn-group" role="group">
+                                                <input type="hidden" name="_csrf" value=<%= csrfToken %>>
+                                                <button type="submit" class="btn btn-outline-secondary" name="minus" <% if(p.quantity<2) { %>disabled<% } %>>-</button>
+                                                <button type="submit" class="btn btn-outline-secondary" name="plus">+</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <img class="card-img-top" src="/<%=p.productId.imageUrl%>" alt="Card image cap">
+                                <h5 class="card-title"><%=p.productId.title%></h5>
+                                <p class="card-text"><%=p.productId.description%></p>
+                                <p class="card-text">Rs. <%=p.productId.price%> x <%=p.quantity%> Qty: Rs. <%=p.itemTotal%></p>
+                                <form action="/cart-delete-product" method="POST">
+                                    <input type="hidden" name="productId" value="<%=p.productId._id%>">
+                                    <input type="hidden" name="_csrf" value=<%= csrfToken %>>
+                                    <button type="submit" class="btn btn-outline-danger">Delete</button>
+                                </form>
+                            </div>
+                            <div class="card-footer text-muted">
+                                Total: Rs. <%=p.itemTotal%>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+                </div>
+                <div class="row justify-content-center m-4">
+                    <h5 class="text-success col-sm-2">Cart Total: <%= cartTotal %></h5>
+                    <a href="/checkout" class="btn btn-outline-primary">Order Now!</a>
+                </div>
+            <%} else {%>
+                <div class="text-center">
+                    <h5>Your cart is empty.</h5>
+                    <div class="form-group mt-4">
+                        <a href="/products" class="btn btn-outline-primary">Browse Products</a>
+                    </div>
+                </div>
+            <%}%>
+        </div>
+<%-include('../includes/end.ejs')%>

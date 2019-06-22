@@ -1,0 +1,81 @@
+<%-include('../includes/head.ejs')%>
+        <title><%=docTitle%></title>
+    </head>
+    <body>
+        <%-include('../includes/navigation.ejs')%>
+        <div class="jumbotron">
+            <div class="container">
+                <h1 class="display-4"><%=docTitle%></h1>
+            </div>
+        </div>
+        <div class="container">
+            <%if (product) {%>
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <img class="card-img-top" src="/<%=product.imageUrl%>" alt="Card image cap">
+                            </div>
+                            <div class="col-sm-9">
+                                <h3 class="card-title"><%=product.title%></h3>
+                                <p class="card-text"><%=product.description%></p>
+                                <h5>Rs. <%=product.price%></h5>
+                                <% if (isLoggedIn === true) { %>
+                                    <%-include('../includes/add-to-cart.ejs', {product: product})%>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <form action="/comment" method="POST" class="mt-4">
+                    <div class="form-group">
+                        <textarea class="form-control" rows="3" name="message" style="border-color: <%=validationErrors.find(e => e.param==='message') ? 'red' : 'none'%>" placeholder="What do you think about this offer?"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <% if (errorMessage) { %>
+                            <div class="alert alert-warning" role="alert">
+                                <%= errorMessage %>
+                            </div>
+                        <% } %>
+                        <input type="hidden" name="productId" value="<%=product._id%>">
+                        <input type="hidden" name="_csrf" value=<%= csrfToken %>>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-outline-secondary mt-2">Comment</button>
+                    </div>
+                </form>
+                <%if (product.comments.length>0) {%>
+                <%for (let comment of product.comments.reverse()) {%>
+                    <div class="card mb-2">
+                        <div class="card-body">
+                          <blockquote class="blockquote mb-0">
+                            <p><%=comment.message%></p>
+                          </blockquote>
+                        </div>
+                        <div class="card-footer text-muted">
+                            By <%=comment.userId.name%> (<%=comment.postedAt.toLocaleString()%>)%>
+                            <%if ( userId.toString() === comment.userId._id.toString() ) {%>
+                                <input type="hidden" name="productId" value="<%=product._id%>">
+                                <input type="hidden" name="commentId" value="<%=comment._id%>">
+                                <input type="hidden" name="_csrf" value=<%= csrfToken %>>
+                                <button type="button" onclick="deleteComment(this)" class="btn btn-outline-danger float-right">Delete</button>
+                            <%}%>
+                        </div>
+                    </div>
+                <%}%>
+                <%} else {%>
+                    <div class="text-center">
+                        <h5>No Comments. Be the first one to comment!</h5>
+                    </div>
+                <%}%>
+            <%} else {%>
+                <div class="text-center">
+                    <h5>Product not found.</h5>
+                    <div class="mt-4">
+                        <a href="/" class="btn btn-outline-primary">Go Home</a>
+                    </div>
+                </div>
+            <%}%>
+        </div>
+<%-include('../includes/end.ejs')%>
+<script src="/js/shop.js"></script>

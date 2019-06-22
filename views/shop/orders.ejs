@@ -1,0 +1,51 @@
+<%-include('../includes/head.ejs')%>
+        <title><%=docTitle%></title>
+    </head>
+    <body>
+        <%-include('../includes/navigation.ejs')%>
+        <div class="jumbotron">
+            <div class="container">
+                <h1 class="display-4"><%=docTitle%></h1>
+            </div>
+        </div>
+        <div class="container">
+            <%if (orders.length > 0) {%>
+            <% orders.forEach(order => { %>
+            <div class="card mt-4">
+                <div class="card-header text-muted">
+                    Order Id: <%=order._id%> <a href="/orders/<%= order._id %>" class="float-right text-decoration-none">Download Invoice</a>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                    <% order.products.forEach(p => { %>
+                        <div class="col-sm-4">
+                            <div class="card mt-2" style="width: 18rem;">
+                                <div class="card-header text-muted">
+                                    Qty: <%=p.quantity%>
+                                </div>
+                                <div class="card-body">
+                                    <img class="card-img-top" src="/<%=p.product.imageUrl%>" alt="Card image cap">
+                                    <h5 class="card-title mt-2"><%=p.product.title%></h5>
+                                    <p class="card-text"><%=p.product.description%></p>
+                                    <p class="card-text">Rs. <%=p.product.price%> x <%=p.quantity%> Qty: Rs. <%=p.product.price * p.quantity%></p>
+                                </div>
+                                <div class="card-footer text-muted">
+                                    Total: Rs. <%=p.product.price * p.quantity%>
+                                </div>
+                            </div>
+                        </div>
+                    <% }); %>
+                    </div>
+                </div>
+            </div>
+            <% }) %>
+            <%} else {%>
+            <div class="text-center">
+                <h5>No orders placed.</h5>
+                <div class="mt-4">
+                    <a href="/products" class="btn btn-outline-primary">Browse Products</a>
+                </div>
+            </div>
+            <%}%>
+        </div>
+<%-include('../includes/end.ejs')%>
