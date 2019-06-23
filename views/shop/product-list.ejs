@@ -3,10 +3,8 @@
     </head>
     <body>
         <%-include('../includes/navigation.ejs')%>
-        <div class="jumbotron">
-            <div class="container">
-                <h1 class="display-4"><%=docTitle%></h1>
-            </div>
+        <div class="container text-center mt-4">
+            <h1 class="display-4">MOMnPOP</h1>
         </div>
         <div class="container">
             <%if (products.length > 0) {%>
@@ -14,11 +12,11 @@
                 <%for (let product of products) {%>
                     <div class="col-sm-4">
                         <a href="/products/<%=product._id%>" class="text-decoration-none text-reset">
-                            <div class="card mt-4" style="width: 18rem;">
+                            <div class="card mt-4" style="width: 22rem;">
                                 <div class="card-body">
                                     <img class="card-img-top" src="/<%=product.imageUrl%>" alt="Card image cap">
                                     <h5 class="card-title mt-2"><%=product.title%></h5>
-                                    <p class="card-text"><%=product.description%></p>
+                                    <p class="card-text"><%=product.descriptionPreview%></p>
                                     <% if (isLoggedIn === true) { %>
                                         <%-include('../includes/add-to-cart.ejs', {product: product})%>
                                     <% } %>
@@ -34,10 +32,8 @@
                 </div>
             <% } else { %>
                 <div class="text-center">
-                    <h5>No Products.</h5>
-                    <div class="mt-4">
-                        <a href="/" class="btn btn-outline-primary">Go Home</a>
-                    </div>
+                    <h5>No products.</h5>
+                    <a href="/" class="btn btn-outline-primary m-4">Go Home</a>
                 </div>
             <% } %>
         </div>

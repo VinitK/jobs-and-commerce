@@ -6,29 +6,27 @@
                 float: none; /* Added */
                 margin-bottom: 10px; /* Added */
                 width: 25rem;
+                border: none;
+                opacity: 0.7;
             }
         </style>
     </head>
     <body>
         <%-include('../includes/navigation.ejs')%>
-        <!-- <div class="jumbotron">
-            <div class="container">
-                <h1 class="display-4"><%=docTitle%></h1>
-            </div>
-        </div> -->
-        <div class="container">
-            <div class="card mt-4">
-                <div class="card-body">
-                    <h5 class="card-title">Upload resume. That's it!</h5>
-                    <p class="card-text">Simply upload your resume. Then sit back and relax.</p>
-                    <img class="card-img-top" src="https://cdn1.iconfinder.com/data/icons/hawcons/32/698394-icon-130-cloud-upload-256.png" alt="Card image cap">
-                    <form action="/cvfy/resume" method="POST" enctype="multipart/form-data">
-                        <div class="form-group">
-                            <input type="file" class="form-control-file" name="resume">
-                        </div>
-                        <button type="submit" class="btn btn-primary">Send</button>
-                    </form>
-                </div>
+        <div class="container text-center mt-4">
+            <h1 class="display-4"><%=docTitle%></h1>
+        </div>
+        <div class="card mt-2">
+            <div class="card-body">
+                <h5 class="card-title">Upload resume. That's it!</h5>
+                <p class="card-text">Simply upload your resume. Then sit back and relax. Our program will work on your behalf!</p>
+                <img class="card-img-top" src="https://cdn1.iconfinder.com/data/icons/hawcons/32/698394-icon-130-cloud-upload-256.png" alt="Card image cap">
+                <form action="/cvfy/resume" method="POST" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <input type="file" class="form-control-file" name="resume">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send</button>
+                </form>
             </div>
         </div>
 <%-include('../includes/end.ejs')%>

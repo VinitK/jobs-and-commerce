@@ -1,5 +1,5 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">MOMnPOP</a>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">Weekay</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -15,7 +15,7 @@
       <li class="nav-item <%=docTitle === 'My Cart' ? 'active' : ''%>">
         <a class="nav-link" href="/cart">My Cart</a>
       </li>
-      <li class="nav-item <%=docTitle === 'Orders' ? 'active' : ''%>">
+      <li class="nav-item <%=docTitle === 'My Orders' ? 'active' : ''%>">
         <a class="nav-link" href="/orders">Orders</a>
       </li>
       <li class="nav-item <%=docTitle === 'Add Product' ? 'active' : ''%>">
@@ -42,7 +42,7 @@
         <li class="nav-item">
           <form action="/logout" method="POST">
             <input type="hidden" name="_csrf" value=<%= csrfToken %>>
-            <button type="submit" class="btn btn-link">Logout</button>
+            <button type="submit" class="btn nav-link">Logout</button>
           </form>
         </li>
       <% } else { %>

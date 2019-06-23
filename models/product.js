@@ -16,6 +16,11 @@ const productSchema = new Schema({
         type: String,
         required: true
     },
+    descriptionPreview: {
+        type: String,
+        required: true,
+        maxlength: 100
+    },
     price: {
         type: Number,
         required: true

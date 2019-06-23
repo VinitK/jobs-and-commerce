@@ -11,14 +11,8 @@ const Product = require('../models/product');
 
 // function to export
 exports.getAPI = (req, res, next) => {
-    req.session.destroy((err) => {
-        if (err) {
-            console.log(err);
-        }
-        res.render('api/api', { 
-            docTitle: 'REST APIs',
-            isLoggedIn: false
-        });
+    res.render('api/api', { 
+        docTitle: 'REST APIs'
     });
 }
 
@@ -59,12 +53,7 @@ exports.postProduct = (req, res, next) => {
 
 // function to export
 exports.getFaice = (req, res, next) => {
-    req.session.destroy((err) => {
-        if (err) {
-            console.log(err);
-        }
-        res.render('api/faice', { 
-            docTitle: 'fAIce'
-        });
+    res.render('api/faice', { 
+        docTitle: 'fAIce'
     });
 }

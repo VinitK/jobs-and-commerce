@@ -35,6 +35,7 @@ exports.postAddProduct = async (req, res, next) => {
                 {
                     title: title,  
                     description: description, 
+                    descriptionPreview: description.substring(0,100),
                     price: price, 
                     imageUrl: image.path.replace("\\" ,"/"),
                     userId: req.user
@@ -164,6 +165,7 @@ exports.postEditProduct = async (req, res, next) => {
             if (product.userId.toString() === req.user._id.toString()) {
                 product.title = updatedTitle;
                 product.description = updatedDescription;
+                product.descriptionPreview = updatedDescription.substring(0,100);
                 product.price = updatedPrice;
                 if (image) {
                     fileHelper.deleteFile(product.imageUrl);

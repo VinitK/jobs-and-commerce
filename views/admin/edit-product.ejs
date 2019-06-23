@@ -1,20 +1,30 @@
 <%-include('../includes/head.ejs')%>
+        <style>
+            .card {
+                margin: 0 auto; /* Added */
+                float: none; /* Added */
+                margin-bottom: 10px; /* Added */
+                width: 25rem;
+                border: none;
+                opacity: 0.7;
+            }
+        </style>
         <title><%=docTitle%></title>
     </head>
     <body>
         <%-include('../includes/navigation.ejs')%>
-        <div class="jumbotron">
-            <div class="container">
-                <h1 class="display-4"><%=docTitle%></h1>
-            </div>
+        <div class="container text-center mt-4">
+            <h1 class="display-4"><%=docTitle%></h1>
         </div>
-        <div class="container">
-            <div class="col-sm-4 offset-sm-4">
+        <div class="card mt-2">
+            <div class="card-body">
+        
                 <% if (errorMessage) { %>
                     <div class="alert alert-warning" role="alert">
                         <%= errorMessage %>
                     </div>
                 <% } %>
+                
                 <form action="<% if (editing==='true') { %>/admin/edit-product<% } else { %>/admin/add-product<% } %>" method="POST" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="title">Title</label>
@@ -37,8 +47,10 @@
                     <% } %>
                     <input type="hidden" name="_csrf" value=<%= csrfToken %>>
                     <!-- End Hidden Inputs -->
-                    <button type="submit" class="btn btn-primary"><% if (editing==='true') { %>Update<% } else { %>Save<% } %></button>
-                    <a href="/admin/products" class="btn btn-secondary">Cancel</a>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary"><% if (editing==='true') { %>Update<% } else { %>Save<% } %></button>
+                        <a href="/admin/products" class="btn btn-secondary">Cancel</a>
+                    </div>
                 </form>
             </div>
         </div>

@@ -3,10 +3,8 @@
     </head>
     <body>
         <%-include('../includes/navigation.ejs')%>
-        <div class="jumbotron">
-            <div class="container">
-                <h1 class="display-4"><%=docTitle%></h1>
-            </div>
+        <div class="container text-center mt-4">
+            <h1 class="display-4"><%=docTitle%></h1>
         </div>
         <div class="container">
             <%if (orders.length > 0) {%>
@@ -19,14 +17,13 @@
                     <div class="row">
                     <% order.products.forEach(p => { %>
                         <div class="col-sm-4">
-                            <div class="card mt-2" style="width: 18rem;">
+                            <div class="card mt-2" style="width: 21rem;">
                                 <div class="card-header text-muted">
                                     Qty: <%=p.quantity%>
                                 </div>
                                 <div class="card-body">
-                                    <img class="card-img-top" src="/<%=p.product.imageUrl%>" alt="Card image cap">
                                     <h5 class="card-title mt-2"><%=p.product.title%></h5>
-                                    <p class="card-text"><%=p.product.description%></p>
+                                    <p class="card-text"><%=p.product.descriptionPreview%></p>
                                     <p class="card-text">Rs. <%=p.product.price%> x <%=p.quantity%> Qty: Rs. <%=p.product.price * p.quantity%></p>
                                 </div>
                                 <div class="card-footer text-muted">
@@ -42,9 +39,7 @@
             <%} else {%>
             <div class="text-center">
                 <h5>No orders placed.</h5>
-                <div class="mt-4">
-                    <a href="/products" class="btn btn-outline-primary">Browse Products</a>
-                </div>
+                <a href="/products" class="btn btn-outline-primary m-4">Browse Products</a>
             </div>
             <%}%>
         </div>

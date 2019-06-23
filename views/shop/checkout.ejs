@@ -13,7 +13,7 @@
                 <div class="row">
                 <% products.forEach(p => { %>
                     <div class="col-sm-4">
-                        <div class="card mt-4" style="width: 18rem;">
+                        <div class="card mt-4" style="width: 22rem;">
                             <div class="card-header text-muted">
                                 <div class="row">
                                     <div class="col-sm-8">
@@ -34,7 +34,7 @@
                             <div class="card-body">
                                 <img class="card-img-top" src="/<%=p.productId.imageUrl%>" alt="Card image cap">
                                 <h5 class="card-title"><%=p.productId.title%></h5>
-                                <p class="card-text"><%=p.productId.description%></p>
+                                <p class="card-text"><%=p.productId.descriptionPreview%></p>
                                 <p class="card-text">Rs. <%=p.productId.price%> x <%=p.quantity%> Qty: Rs. <%=p.itemTotal%></p>
                             </div>
                             <div class="card-footer text-muted">

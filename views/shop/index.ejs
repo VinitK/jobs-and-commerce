@@ -1,24 +1,76 @@
 <%-include('../includes/head.ejs')%>
         <title><%=docTitle%></title>
+        <style>
+            /* REFERENCE https://codepen.io/kedar/pen/MpXgoR */
+            .bg-gold {
+                background: -webkit-linear-gradient(150deg, #ffed4b 50%, #fdcd3b 50%);
+                background: -o-linear-gradient(150deg, #ffed4b 50%, #fdcd3b 50%);
+                background: -moz-linear-gradient(150deg, #ffed4b 50%, #fdcd3b 50%);
+                background: linear-gradient(150deg, #ffed4b 50%, #fdcd3b 50%);
+                border: none;
+            }
+            .bg-flat {
+                background: -webkit-linear-gradient(70deg, #ff6464 40%, #5ac8fa 40%);
+                background: -o-linear-gradient(70deg, #ff6464 40%, #5ac8fa 40%);
+                background: -moz-linear-gradient(70deg, #ff6464 40%, #5ac8fa 40%);
+                background: linear-gradient(70deg, #ff6464 40%, #5ac8fa 40%);
+                border: none;
+            }
+            .bg-purple {
+                color: #fff;
+                background: -webkit-linear-gradient(110deg, #a60af3 40%, rgba(0, 0, 0, 0) 30%), -webkit-radial-gradient(farthest-corner at 0% 0%, #7a00cc 70%, #c03fff 70%);
+                background: -o-linear-gradient(110deg, #a60af3 40%, rgba(0, 0, 0, 0) 30%), -o-radial-gradient(farthest-corner at 0% 0%, #7a00cc 70%, #c03fff 70%);
+                background: -moz-linear-gradient(110deg, #a60af3 40%, rgba(0, 0, 0, 0) 30%), -moz-radial-gradient(farthest-corner at 0% 0%, #7a00cc 70%, #c03fff 70%);
+                background: linear-gradient(110deg, #a60af3 40%, rgba(0, 0, 0, 0) 30%), radial-gradient(farthest-corner at 0% 0%, #7a00cc 70%, #c03fff 70%);
+                border: none;
+            }
+        </style>
     </head>
     <body>
         <%-include('../includes/navigation.ejs')%>
-        <div class="jumbotron">
+        <div class="card text-left bg-gold">
             <div class="container">
-                <h1 class="display-4"><%=docTitle%></h1>
+                <div class="card-body">
+                    <h5 class="display-4">fAIce</h5>
+                    <p class="card-text">Check out fAIce - AI for face and expression detection</p>
+                    <a href="/api/faice" class="btn btn-outline-danger">Open fAIce</a>
+                </div>
             </div>
         </div>
-        <div class="container">
+        <div class="card text-right bg-flat">
+            <div class="container">
+                <div class="card-body">
+                    <h5 class="display-4">CVFY</h5>
+                    <p class="card-text">The Quickest Way to Job Search Ever. Period.</p>
+                    <a href="/cvfy" class="btn btn-outline-primary">Checkout CVFY</a>
+                </div>
+            </div>
+        </div>
+        <div class="card text-center bg-purple">
+            <div class="container">
+                <div class="card-body">
+                    <h5 class="display-4">MOMnPOP</h5>
+                    <p class="card-text">Sell Products & Services Online with MOMnPOP.</p>
+                    <a href="/admin/products" class="btn btn-outline-light">Sell on MOMnPOP</a>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+            <div class="mx-auto order-0">
+                <div class="navbar-brand mx-auto">Latest From MOMnPOP</div>
+            </div>
+        </nav>
+        <div class="container mt-2">
             <%if (products.length > 0) {%>
             <div class="row">
                 <%for (let product of products) {%>
                 <div class="col-sm-4">
                     <a href="/products/<%=product.id%>" class="text-decoration-none text-reset">
-                        <div class="card mt-4" style="width: 18rem;">
+                        <div class="card mt-4" style="width: 22rem;">
                             <div class="card-body">
                                 <img class="card-img-top" src="/<%=product.imageUrl%>" alt="Card image cap">
                                 <h5 class="card-title mt-2"><%=product.title%></h5>
-                                <p class="card-text"><%=product.description%></p>
+                                <p class="card-text"><%=product.descriptionPreview%></p>
                                 <% if (isLoggedIn === true) { %>
                                     <%-include('../includes/add-to-cart.ejs', {product: product})%>
                                 <% } %>
@@ -31,16 +83,6 @@
                 </div>
                 <%}%>
                 <%-include('../includes/pagination.ejs')%>
-            </div>
-            <%} else {%>
-            <div class="text-center">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h5 class="display-4">fAIce</h5>
-                        <p class="card-text">Check out fAIce - AI for face and expression detection</p>
-                        <a href="/api/faice" class="btn btn-primary">Open fAIce</a>
-                    </div>
-                </div>
             </div>
             <%}%>
         </div>

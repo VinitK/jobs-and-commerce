@@ -12,6 +12,7 @@ const uuidv4 = require('uuidv4');
 
 const errorController = require('./controllers/error');
 const shopController = require('./controllers/shop');
+
 const isAuth = require('./middleware/is-auth');
 const User = require('./models/user');
 
@@ -117,14 +118,14 @@ app.use((error, req, res, next) => {
     res.status(500).render('500', {
         docTitle: '500',
         error: error,
-        isLoggedIn: req.isLoggedIn,
+        isLoggedIn: req.session.isLoggedIn,
     });
 });
 
 mongoose
   .connect(MONGODB_URI, { useNewUrlParser: true, useCreateIndex: true })
   .then(result => {
-    app.listen(3000);
+    app.listen(5000);
   })
   .catch(err => {
     console.log(err);

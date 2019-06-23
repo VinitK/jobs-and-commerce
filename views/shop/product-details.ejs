@@ -1,12 +1,15 @@
 <%-include('../includes/head.ejs')%>
         <title><%=docTitle%></title>
+        <style>
+            h1 {
+                color: #00aaff;
+            }
+        </style>
     </head>
     <body>
         <%-include('../includes/navigation.ejs')%>
-        <div class="jumbotron">
-            <div class="container">
-                <h1 class="display-4"><%=docTitle%></h1>
-            </div>
+        <div class="container text-center mt-4">
+            <h1 class="display-4"><%=docTitle%></h1>
         </div>
         <div class="container">
             <%if (product) {%>
@@ -41,7 +44,7 @@
                         <input type="hidden" name="_csrf" value=<%= csrfToken %>>
                     </div>
                     <div class="form-group">
-                        <button type="submit" class="btn btn-outline-secondary mt-2">Comment</button>
+                        <button type="submit" class="btn btn-outline-secondary">Comment</button>
                     </div>
                 </form>
                 <%if (product.comments.length>0) {%>
@@ -64,7 +67,7 @@
                     </div>
                 <%}%>
                 <%} else {%>
-                    <div class="text-center">
+                    <div class="text-center mb-4">
                         <h5>No Comments. Be the first one to comment!</h5>
                     </div>
                 <%}%>
