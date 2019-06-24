@@ -7,8 +7,8 @@ const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
 const flash = require('connect-flash');
-const multer = require('multer');
-const uuidv4 = require('uuidv4');
+const multer = require('multer'); // for uploading files
+const uuidv4 = require('uuidv4'); // for naming files with random characters
 const env = require('dotenv');
 env.config();
 
@@ -36,9 +36,9 @@ const csrfProtection = csrf();
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     
-    if (file.fieldname === "resume") {
+    if (file.fieldname === "resume") { // if uploading resume
       cb(null, 'resumes');
-    } else {
+    } else { // else uploading image
       cb(null, 'images');
     }
   },
@@ -76,7 +76,29 @@ app.set('views', 'views');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use(multer({ storage: fileStorage, limits:{ fileSize:'2mb' }, fileFilter: fileFilter }).fields([{ name: 'resume', maxCount: 1 }, { name: 'image', maxCount: 1 }]));
+app.use(
+  multer(
+    { 
+      storage: fileStorage, 
+      limits:
+        { 
+          fileSize:'2mb' 
+        }, 
+      fileFilter: fileFilter 
+    }
+  ).fields(
+    [
+      { 
+        name: 'resume', 
+        maxCount: 1 
+      }, 
+      { 
+        name: 'image', 
+        maxCount: 1 
+      }
+    ]
+  )
+);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
