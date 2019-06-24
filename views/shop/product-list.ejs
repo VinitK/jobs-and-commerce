@@ -16,7 +16,7 @@
                                 <div class="card-body">
                                     <img class="card-img-top" src="/<%=product.imageUrl%>" alt="Card image cap">
                                     <h5 class="card-title mt-2"><%=product.title%></h5>
-                                    <p class="card-text"><%=product.descriptionPreview%></p>
+                                    <p class="card-text"><%=product.descriptionPreview%>...</p>
                                     <% if (isLoggedIn === true) { %>
                                         <%-include('../includes/add-to-cart.ejs', {product: product})%>
                                     <% } %>

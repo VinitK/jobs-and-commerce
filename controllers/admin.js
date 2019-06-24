@@ -5,7 +5,6 @@ const { validationResult } = require('express-validator/check');
 
 // own imports
 const Product = require('../models/product');
-const User = require('../models/user');
 const fileHelper = require('../util/file');
 
 // constants
@@ -23,11 +22,11 @@ exports.getAddProduct = (req, res, next) => {
 }
 
 // function to export
-exports.postAddProduct = async (req, res, next) => {
+exports.postAddProduct = (req, res, next) => {
     const title = req.body.title;
     const description = req.body.description;
-    const price = req.body.price
-    const image = req.file;
+    const price = req.body.price;
+    const image = req.files['image'];
     if (image) {
         const errors = validationResult(req);
         if (errors.isEmpty()) {
@@ -37,7 +36,7 @@ exports.postAddProduct = async (req, res, next) => {
                     description: description, 
                     descriptionPreview: description.substring(0,100),
                     price: price, 
-                    imageUrl: image.path.replace("\\" ,"/"),
+                    imageUrl: image[0].path.replace("\\" ,"/"),
                     userId: req.user
                 }
             );
@@ -75,7 +74,7 @@ exports.postAddProduct = async (req, res, next) => {
                     description: description
                 },
                 hasError: true,
-                errorMessage: 'Please make sure the image is of file-type .png, .jpg, or ,jpeg only.',
+                errorMessage: 'Please make sure the image is of file-type .png, .jpg, or ,.jpeg only.',
                 validationErrors: []
             }
         );
@@ -154,10 +153,10 @@ exports.getEditProduct = async (req, res, next) => {
 exports.postEditProduct = async (req, res, next) => {
     const productId = req.body.productId;
     const updatedTitle = req.body.title;
-    const image = req.file;
+    const image = req.file['image'];
+    comsole.log(image);
     const updatedDescription = req.body.description;
     const updatedPrice = req.body.price;
-
     const errors = validationResult(req);
     if (errors.isEmpty()) {
         try {
@@ -169,7 +168,7 @@ exports.postEditProduct = async (req, res, next) => {
                 product.price = updatedPrice;
                 if (image) {
                     fileHelper.deleteFile(product.imageUrl);
-                    product.imageUrl = image.path.replace("\\","/");
+                    product.imageUrl = image[0].path.replace("\\","/");
                 }
                 await product.save()
                 console.log("UPDATED PRODUCT");

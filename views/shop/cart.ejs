@@ -32,7 +32,7 @@
                             <div class="card-body">
                                 <img class="card-img-top" src="/<%=p.productId.imageUrl%>" alt="Card image cap">
                                 <h5 class="card-title"><%=p.productId.title%></h5>
-                                <p class="card-text"><%=p.productId.descriptionPreview%></p>
+                                <p class="card-text"><%=p.productId.descriptionPreview%>...</p>
                                 <p class="card-text">Rs. <%=p.productId.price%> x <%=p.quantity%> Qty: Rs. <%=p.itemTotal%></p>
                                 <form action="/cart-delete-product" method="POST">
                                     <input type="hidden" name="productId" value="<%=p.productId._id%>">
