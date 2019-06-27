@@ -10,7 +10,6 @@
   "author": "Vinit Khandelwal",
   "license": "ISC",
   "devDependencies": {
-    "dotenv": "^8.0.0"
   },
   "dependencies": {
     "aws-sdk": "^2.480.0",
