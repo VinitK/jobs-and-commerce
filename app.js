@@ -9,8 +9,8 @@ const csrf = require('csurf');
 const flash = require('connect-flash');
 const multer = require('multer'); // for uploading files
 const uuidv4 = require('uuidv4'); // for naming files with random characters
-const env = require('dotenv');
-env.config();
+// const env = require('dotenv');
+// env.config();
 
 const errorController = require('./controllers/error');
 const shopController = require('./controllers/shop');
