@@ -169,7 +169,7 @@ app.use((error, req, res, next) => {
 mongoose
   .connect(MONGODB_URI, { useNewUrlParser: true, useCreateIndex: true })
   .then(result => {
-    app.listen(process.env.port || 5000);
+    app.listen(process.env.PORT || 5000);
   })
   .catch(err => {
     console.log(err);
