@@ -92,7 +92,7 @@ exports.postSignup = (req, res, next) => {
                         }
                     }).then(result => {
                         if (result.message === 'success') {
-                            req.flash('loginInfo', 'An email verification link has been sent to your email address. Please verify to log in.');
+                            req.flash('loginInfo', 'An email verification link has been sent to your email address. PLEASE CHECK SPAM FOLDER TOO.');
                             res.redirect('/login');
                         } else {
                             req.flash('signupError', 'Something went wrong. Could not register. Please try again!');

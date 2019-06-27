@@ -55,34 +55,36 @@
                 </div>
             </div>
         </div>
-        <div class="container mt-2">
+        <div>
             <%if (products.length > 0) {%>
             <nav class="navbar navbar-expand-md navbar-dark bg-dark">
                 <div class="mx-auto order-0">
                     <div class="navbar-brand mx-auto">Latest From MOMnPOP</div>
                 </div>
             </nav>
-            <div class="row">
-                <%for (let product of products) {%>
-                <div class="col-sm-4">
-                    <a href="/products/<%=product.id%>" class="text-decoration-none text-reset">
-                        <div class="card mt-4" style="width: 22rem;">
-                            <div class="card-body">
-                                <img class="card-img-top" src="/<%=product.imageUrl%>" alt="Card image cap">
-                                <h5 class="card-title mt-2"><%=product.title%></h5>
-                                <p class="card-text"><%=product.descriptionPreview%>...</p>
-                                <% if (isLoggedIn === true) { %>
-                                    <%-include('../includes/add-to-cart.ejs', {product: product})%>
-                                <% } %>
+            <div class="container">
+                <div class="row">
+                    <%for (let product of products) {%>
+                    <div class="col-sm-4">
+                        <a href="/products/<%=product.id%>" class="text-decoration-none text-reset">
+                            <div class="card mt-4" style="width: 22rem;">
+                                <div class="card-body">
+                                    <img class="card-img-top" src="/<%=product.imageUrl%>" alt="Card image cap">
+                                    <h5 class="card-title mt-2"><%=product.title%></h5>
+                                    <p class="card-text"><%=product.descriptionPreview%>...</p>
+                                    <% if (isLoggedIn === true) { %>
+                                        <%-include('../includes/add-to-cart.ejs', {product: product})%>
+                                    <% } %>
+                                </div>
+                                <div class="card-footer text-muted">
+                                    Rs. <%=product.price%>
+                                </div>
                             </div>
-                            <div class="card-footer text-muted">
-                                Rs. <%=product.price%>
-                            </div>
-                        </div>
-                    </a>
+                        </a>
+                    </div>
+                    <%}%>
+                    <%-include('../includes/pagination.ejs')%>
                 </div>
-                <%}%>
-                <%-include('../includes/pagination.ejs')%>
             </div>
             <%}%>
         </div>
