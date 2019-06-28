@@ -8,11 +8,13 @@ const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
 const flash = require('connect-flash');
-const multer = require('multer'); // for uploading files
+var aws = require('aws-sdk') // upload files
+var multer = require('multer') // upload files
+var multerS3 = require('multer-s3') // upload files
 const uuidv4 = require('uuidv4'); // for naming files with random characters
 const helmet = require('helmet'); // security middleware
 const compression = require('compression'); // middleware
-const morgan = require('morgan'); // middleware
+// const morgan = require('morgan'); // middleware
 const env = require('dotenv'); // Remove in Heroku
 env.config(); // Remove in Heroku
 
@@ -86,7 +88,7 @@ const accessLogStream = fs.createWriteStream(
 
 app.use(helmet()); // security middleware
 app.use(compression()); // compressing code files middleware
-app.use(morgan('combined', { stream: accessLogStream })); // logging requests middleware
+// app.use(morgan('combined', { stream: accessLogStream })); // logging requests middleware
 
 app.use(bodyParser.urlencoded({ extended: false }));
 

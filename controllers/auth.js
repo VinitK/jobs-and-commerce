@@ -85,7 +85,7 @@ exports.postSignup = (req, res, next) => {
                                 to: email,
                                 from: 'vinit.k.khandelwal@gmail.com',
                                 subject: "MOMnPOP: Verify Email",
-                                html: `<h1>Verify Email</h1><a href="http://localhost:5000/verify/${user._id.toString()}/${user.verifyToken}">Verify email</a>`
+                                html: `<h1>Verify Email</h1><a href="${process.env.HOST}/verify/${user._id.toString()}/${user.verifyToken}">Verify email</a>`
                             });
                         } else {
                             throw new Error("Could not create user. Something went wrong!");
