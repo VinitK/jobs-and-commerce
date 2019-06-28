@@ -6,8 +6,8 @@ const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const sendgridTransport = require('nodemailer-sendgrid-transport');
 const { validationResult } = require('express-validator/check');
-// const env = require('dotenv');
-// env.config();
+const env = require('dotenv'); // Remove in Heroku
+env.config(); // Remove in Heroku
 
 // own imports
 const User = require('../models/user');

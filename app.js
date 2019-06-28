@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -9,8 +10,11 @@ const csrf = require('csurf');
 const flash = require('connect-flash');
 const multer = require('multer'); // for uploading files
 const uuidv4 = require('uuidv4'); // for naming files with random characters
-// const env = require('dotenv');
-// env.config();
+const helmet = require('helmet'); // security middleware
+const compression = require('compression'); // middleware
+const morgan = require('morgan'); // middleware
+const env = require('dotenv'); // Remove in Heroku
+env.config(); // Remove in Heroku
 
 const errorController = require('./controllers/error');
 const shopController = require('./controllers/shop');
@@ -26,6 +30,7 @@ const MONGODB_URI =
   process.env.MONGODB_URI;
 
 const app = express();
+
 const store = new MongoDBStore({
   uri: process.env.MONGODB_URI,
   collection: 'sessions'
@@ -73,6 +78,15 @@ const fileFilter = (req, file, cb) => {
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
+
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, 'access.log'), 
+  { flags: 'a' }
+);
+
+app.use(helmet()); // security middleware
+app.use(compression()); // compressing code files middleware
+app.use(morgan('combined', { stream: accessLogStream })); // logging requests middleware
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -162,7 +176,7 @@ app.use((error, req, res, next) => {
   console.error(error);
     res.status(500).render('500', {
         docTitle: '500',
-        error: error
+        error: "Inform Support"
     });
 });
 
@@ -170,7 +184,8 @@ mongoose
   .connect(MONGODB_URI, { useNewUrlParser: true, useCreateIndex: true })
   .then(result => {
     app.listen(process.env.PORT || 5000);
+    console.log("Listening on PORT");
   })
   .catch(err => {
-    console.log(err);
+    console.error(err);
   });

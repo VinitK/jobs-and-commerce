@@ -3,12 +3,14 @@ const fs = require('fs');
 const path = require('path');
 
 // third party imports
+const env = require('dotenv'); // Remove in Heroku
+env.config(); // Remove in Heroku
 const PDFDocument = require('pdfkit');
 const { validationResult } = require('express-validator/check');
 const mongoose = require('mongoose');
 // Set your secret key: remember to change this to your live secret key in production
 // See your keys here: https://dashboard.stripe.com/account/apikeys
-const stripe = require('stripe')('sk_test_M8OEuOtXmWbxHiKkfeZ9oFPw00UFR8NtvM');
+const stripe = require('stripe')(process.env.STRIPE_KEY);
 
 // own imports
 const Product = require('../models/product');
