@@ -28,6 +28,7 @@ exports.postResume = async (req, res, next) => {
             console.log('RESUME CREATED!');
             res.render('cvfy/cvfy', {
                 docTitle: 'CVFY',
+                resume: null,
                 message: "Thank you for trusting in us! Our program begins to find relevant jobs for you. You will be mailed soon.",
                 errorMessage: null
             });
@@ -42,6 +43,7 @@ exports.postResume = async (req, res, next) => {
         res.status(422).render('cvfy/cvfy', 
             { 
                 docTitle: 'CVFY',
+                resume: null,
                 message: null, 
                 errorMessage: 'Please make sure the file is of file-type .pdf, .doc, or .docx only.'
             }

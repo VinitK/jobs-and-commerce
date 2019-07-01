@@ -8,9 +8,7 @@ const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
 const flash = require('connect-flash');
-var aws = require('aws-sdk') // upload files
 var multer = require('multer') // upload files
-var multerS3 = require('multer-s3') // upload files
 const uuidv4 = require('uuidv4'); // for naming files with random characters
 const helmet = require('helmet'); // security middleware
 const compression = require('compression'); // middleware
@@ -27,11 +25,22 @@ const shopRoutes = require('./routes/shop');
 const authRoutes = require('./routes/auth');
 const cvfyRoutes = require('./routes/cvfy');
 const apiRoutes = require('./routes/api');
+const apiUploads = require('./routes/upload');
 
 const MONGODB_URI =
   process.env.MONGODB_URI;
 
 const app = express();
+
+app.use(bodyParser.json());
+
+// CORS
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
 
 const store = new MongoDBStore({
   uri: process.env.MONGODB_URI,
@@ -81,10 +90,10 @@ const fileFilter = (req, file, cb) => {
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
-const accessLogStream = fs.createWriteStream(
-  path.join(__dirname, 'access.log'), 
-  { flags: 'a' }
-);
+// const accessLogStream = fs.createWriteStream( // logging requests
+//   path.join(__dirname, 'access.log'), 
+//   { flags: 'a' }
+// );
 
 app.use(helmet()); // security middleware
 app.use(compression()); // compressing code files middleware
@@ -167,6 +176,7 @@ app.use((req, res, next) => {
 app.use('/admin', adminRoutes);
 app.use('/cvfy', cvfyRoutes);
 app.use('/api', apiRoutes);
+app.use('/upload', apiUploads);
 app.use(shopRoutes);
 app.use(authRoutes);
 

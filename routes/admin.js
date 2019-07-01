@@ -22,14 +22,16 @@ router.post('/add-product',
                 isAuth, 
                 [
                     body('title')
-                        .isString().withMessage('Only letters and digits allowed in title.')
                         .trim()
+                        .isString().withMessage('Only letters and digits allowed in title.')
                         .isLength({min: 3}).withMessage('Title too short. Enter a longer title!'),
                     body('price', 'Enter a valid price.')
                         .isFloat(),
                     body('description')
                         .trim()
                         .isLength({min: 30, max: 600}).withMessage('Description should be from 30 upto 600 characters!'),
+                    body('imageUrl')
+                        .isURL(),
                 ],
                 adminController.postAddProduct);
 

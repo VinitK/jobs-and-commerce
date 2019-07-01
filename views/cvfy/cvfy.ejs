@@ -47,7 +47,7 @@
                 <% } %>
                 <form action="/cvfy/resume" method="POST" enctype="multipart/form-data">
                     <div class="form-group">
-                        <input type="file" class="form-control-file" name="resume">
+                        <input type="file" class="form-control-file" name="resume" accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document">
                     </div>
                     <input type="hidden" name="_csrf" value=<%= csrfToken %>>
                     <button type="submit" class="btn btn-primary">Send</button>

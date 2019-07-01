@@ -14,7 +14,7 @@
                         <a href="/products/<%=product._id%>" class="text-decoration-none text-reset">
                             <div class="card mt-4" style="width: 22rem;">
                                 <div class="card-body">
-                                    <img class="card-img-top" src="/<%=product.imageUrl%>" alt="Card image cap">
+                                    <img class="card-img-top" src="<%=product.imageUrl%>" alt="Card image cap">
                                     <h5 class="card-title mt-2"><%=product.title%></h5>
                                     <p class="card-text"><%=product.descriptionPreview%>...</p>
                                     <% if (isLoggedIn === true) { %>

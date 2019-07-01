@@ -26,46 +26,31 @@ exports.postAddProduct = (req, res, next) => {
     const title = req.body.title;
     const description = req.body.description;
     const price = req.body.price;
-    const image = req.files['image'];
-    if (image) {
-        const errors = validationResult(req);
-        if (errors.isEmpty()) {
-            const product = new Product(
-                {
-                    title: title,  
-                    description: description, 
-                    descriptionPreview: description.substring(0,100),
-                    price: price, 
-                    imageUrl: image[0].path.replace("\\" ,"/"),
-                    userId: req.user
-                }
-            );
-            product.save()
-            .then(savedProduct => {
-                return req.user.addProduct(savedProduct)
-            }).then(updatedUser => {
-                console.log("PRODUCT CREATED");
-                res.redirect('/admin/products');
-            }).catch(err => console.error(err));
-        } else {
-            res.status(422).render('admin/edit-product', 
-                { 
-                    docTitle: 'Add Product',
-                    editing: 'false',
-                    product: {
-                        title: title,
-                        price: price,
-                        description: description
-                    },
-                    hasError: true,
-                    errorMessage: errors.array()[0].msg,
-                    validationErrors: errors.array()
-                }
-            );
-        }
+    const imageUrl = req.body.imageUrl;
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+        const product = new Product(
+            {
+                title: title,  
+                description: description, 
+                descriptionPreview: description.substring(0,100),
+                price: price, 
+                imageUrl: imageUrl,
+                userId: req.user
+            }
+        );
+        product.save()
+        .then(savedProduct => {
+            console.log(savedProduct);
+            return req.user.addProduct(savedProduct)
+        }).then(updatedUser => {
+            console.log("PRODUCT CREATED");
+            res.status(200).json(updatedUser);
+        }).catch(err => console.error(err));
     } else {
-        res.status(422).render('admin/edit-product', 
-            { 
+        res.status(422).json({
+            url: 'admin/edit-product', 
+            data: { 
                 docTitle: 'Add Product',
                 editing: 'false',
                 product: {
@@ -74,10 +59,10 @@ exports.postAddProduct = (req, res, next) => {
                     description: description
                 },
                 hasError: true,
-                errorMessage: 'Please make sure the image is of file-type .png, .jpg, or ,.jpeg only.',
-                validationErrors: []
+                errorMessage: errors.array()[0].msg,
+                validationErrors: errors.array()
             }
-        );
+        });
     }
 }
 
@@ -151,25 +136,25 @@ exports.getEditProduct = async (req, res, next) => {
 
 // function to export
 exports.postEditProduct = async (req, res, next) => {
-    const productId = req.body.productId;
-    const updatedTitle = req.body.title;
-    const image = req.file['image'];
-    comsole.log(image);
-    const updatedDescription = req.body.description;
-    const updatedPrice = req.body.price;
+
     const errors = validationResult(req);
     if (errors.isEmpty()) {
         try {
-            const product = await Product.findById(productId)
+            const product = await Product.findById(req.body.productId)
             if (product.userId.toString() === req.user._id.toString()) {
-                product.title = updatedTitle;
-                product.description = updatedDescription;
-                product.descriptionPreview = updatedDescription.substring(0,100);
-                product.price = updatedPrice;
-                if (image) {
-                    fileHelper.deleteFile(product.imageUrl);
-                    product.imageUrl = image[0].path.replace("\\","/");
+                product.title = req.body.title;
+                product.description = req.body.description;
+                product.descriptionPreview = req.body.description.substring(0,100);
+                product.price = req.body.price;
+                if (req.body.imageUrl) {
+                    product.imageUrl = req.body.imageUrl;
                 }
+                // if (req.files) {
+                //     if(req.files['image']){
+                //         fileHelper.deleteFile(product.imageUrl);
+                //         product.imageUrl = req.files['image'][0].path.replace("\\","/");
+                //     }
+                // }
                 await product.save()
                 console.log("UPDATED PRODUCT");
                 res.redirect('/admin/products');
@@ -214,7 +199,7 @@ exports.deleteProduct = (req, res, next) => {
             user.removeFromCart(productId);
         });
     }).then(() => {
-        fileHelper.deleteFile(foundProduct.imageUrl);
+        // fileHelper.deleteFile(foundProduct.imageUrl);
         return Product.deleteOne({ _id: productId, userId: user._id }); // Product.findByIdAndRemove(prodId)
     }).then(result => {
         if (result.n > 0) {

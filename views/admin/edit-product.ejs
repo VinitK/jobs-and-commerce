@@ -1,4 +1,5 @@
 <%-include('../includes/head.ejs')%>
+        <title><%=docTitle%></title>
         <style>
             .card {
                 margin: 0 auto; /* Added */
@@ -9,7 +10,7 @@
                 opacity: 0.7;
             }
         </style>
-        <title><%=docTitle%></title>
+        <script type="text/javascript" src="/js/admin.js"></script>
     </head>
     <body>
         <%-include('../includes/navigation.ejs')%>
@@ -25,21 +26,21 @@
                     </div>
                 <% } %>
                 
-                <form action="<% if (editing==='true') { %>/admin/edit-product<% } else { %>/admin/add-product<% } %>" method="POST" enctype="multipart/form-data">
+                <form> <!-- <% if (editing==='true') { %>action="/admin/edit-product"<% } else { %>action="/admin/add-product"<% } %> method="POST" enctype="multipart/form-data" -->
                     <div class="form-group">
                         <label for="title">Title</label>
-                        <input type="text" class="form-control" name="title" value="<% if (editing==='true' || hasError) { %><%=product.title%><% } %>" style="border-color: <%= validationErrors.find(e => e.param==='title') ? 'red;' : 'none;' %>">
+                        <input type="text" class="form-control" name="title" <% if (editing==='true' || hasError) { %>value="<%=product.title%>"<% } %> style="border-color: <%=validationErrors.find(e => e.param==='title') ? 'red;' : 'none;'%>">
                     </div>
                     <div class="form-group">
                         <label for="description">Description</label>
-                        <textarea class="form-control" rows="5" name="description" style="border-color: <%= validationErrors.find(e => e.param==='description') ? 'red;' : 'none;' %>"><% if (editing==='true' || hasError) { %><%=product.description%><% } %></textarea>
+                        <textarea class="form-control" rows="5" name="description" style="border-color: <%=validationErrors.find(e => e.param==='description') ? 'red;' : 'none;'%>"><% if (editing==='true' || hasError) { %><%=product.description%><% } %></textarea>
                     </div>
                     <div class="form-group">
                         <label for="price">Price</label>
-                        <input type="number" step="0.01" class="form-control" name="price" value="<% if (editing==='true' || hasError) { %><%=product.price%><% } %>" style="border-color: <%= validationErrors.find(e => e.param==='price') ? 'red;' : 'none;' %>">
+                        <input type="number" step="0.01" class="form-control" name="price" <% if (editing==='true' || hasError) { %>value="<%=product.price%>"<% } %> style="border-color: <%= validationErrors.find(e => e.param==='price') ? 'red;' : 'none;' %>">
                     </div>
                     <div class="form-group">
-                        <input type="file" name="image">
+                        <input type="file" name="image" accept="image/x-png,image/jpg,image/jpeg">
                     </div>
                     <!-- Start Hidden Inputs -->
                     <% if (editing==='true') { %>
@@ -48,7 +49,7 @@
                     <input type="hidden" name="_csrf" value=<%= csrfToken %>>
                     <!-- End Hidden Inputs -->
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary"><% if (editing==='true') { %>Update<% } else { %>Save<% } %></button>
+                        <button type="button" onclick="submitProduct(this)" class="btn btn-primary"><% if (editing==='true') { %>Update<% } else { %>Save<% } %></button>
                         <a href="/admin/products" class="btn btn-secondary">Cancel</a>
                     </div>
                 </form>
