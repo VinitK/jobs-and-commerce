@@ -12,7 +12,7 @@ const isAuth = require('../middleware/is-auth');
 const router = express.Router();
 
 // functions
-// middleware - GET Signup Page
+// GET Pre-signed Url for Image
 router.get('/image', isAuth, uplaodController.getImage);
 
 // export

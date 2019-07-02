@@ -161,9 +161,11 @@ exports.postLogin = (req, res, next) => {
     } else if (req.body.login==='') {
         const errors = validationResult(req);
         if (errors.isEmpty()) {
-            User.findOne({
-                email: userEmail
-            }).then(user => {
+            User.findOne({email: userEmail})
+            .populate('products')
+            .exec()
+            .then(user => {
+                console.log("LOGGING IN", user);
                 if (user) { // if user found
                     if (user.verified===true){ // if user email is verified
                         verifiedUser = user;
@@ -176,6 +178,7 @@ exports.postLogin = (req, res, next) => {
                 }
             }).then(result => {
                 if (result === true) {
+                    console.log("VERIFIED USER", verifiedUser)
                     req.session.loggedInUser = verifiedUser;
                     req.session.isLoggedIn = true;
                     req.session.save();

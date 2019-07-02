@@ -2,6 +2,9 @@
 
 // third party imports
 const { validationResult } = require('express-validator/check');
+const AWS = require('aws-sdk');
+const env = require('dotenv'); // Remove in Heroku
+env.config(); // Remove in Heroku
 
 // own imports
 const Product = require('../models/product');
@@ -9,6 +12,11 @@ const fileHelper = require('../util/file');
 
 // constants
 let ITEMS_PER_PAGE = 3;
+const s3 = new AWS.S3({
+    accessKeyId: process.env.S3_ACCESS_KEY_ID,
+    secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+    region: "ap-southeast-1"
+});
 
 // function to export
 exports.getAddProduct = (req, res, next) => {
@@ -42,7 +50,7 @@ exports.postAddProduct = (req, res, next) => {
         product.save()
         .then(savedProduct => {
             console.log(savedProduct);
-            return req.user.addProduct(savedProduct)
+            return req.user.addProduct(savedProduct._id);
         }).then(updatedUser => {
             console.log("PRODUCT CREATED");
             res.status(200).json(updatedUser);
@@ -199,8 +207,25 @@ exports.deleteProduct = (req, res, next) => {
             user.removeFromCart(productId);
         });
     }).then(() => {
-        // fileHelper.deleteFile(foundProduct.imageUrl);
-        return Product.deleteOne({ _id: productId, userId: user._id }); // Product.findByIdAndRemove(prodId)
+        // fileHelper.deleteFile(foundProduct.imageUrl); // used with multer
+        // START DELETE FROM S3
+        const key = foundProduct.imageUrl.split('.com/')[1];
+        console.log(key);
+        const params = {
+            Bucket: process.env.S3_BUCKET,
+            Key: key
+        }
+        return s3.deleteObject(params, function (err, data) {
+            if (err) {
+                console.log(err, err.stack); // an error occurred
+            } else {
+                console.log("Data", data, "Data"); // successful response
+            }
+        });
+        // END DELETE FROM S3
+    }).then(url => {
+        console.log("URL", url, "URL");
+        return Product.deleteOne({ _id: productId, userId: user._id });
     }).then(result => {
         if (result.n > 0) {
             console.log("PRODUCT DELETED!");

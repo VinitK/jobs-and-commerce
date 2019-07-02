@@ -2,18 +2,21 @@ const deleteProduct = (btn) => {
     const productId = btn.parentNode.querySelector('[name=productId]').value;
     const csrf = btn.parentNode.querySelector('[name=_csrf]').value;
     const productElement = btn.closest('.col-sm-4');
+
     fetch(`/admin/product/${productId}`, { 
         method: 'DELETE', 
         headers: {
             'csrf-token': csrf
         }
     }).then(result=> {
-        if (result){
+        console.log(result,"deleted product | result");
+        if (result.ok) {
             productElement.parentNode.removeChild(productElement);
         } else {
             throw new Error("Not authorized to delete!");
         }
     }).catch(err => {
+        throw new Error(err);
     });
 };
 
@@ -90,28 +93,29 @@ const submitProduct = (btn) => {
     } else { // else create new product
         const files = form.querySelector('[name=image]').files;
         if (files.length > 0) { // get the file from frontend
-            fetch('/upload/image').then(response => { // get temporary URL
-                console.log(response, "one");
-                if (response.ok){
-                    return response.json();
+            fetch('/upload/image')
+            .then(result => { // get temporary URL
+                console.log(result, "one");
+                if (result.ok){
+                    return result.json();
                 } else {
                     throw new Error("Not authorized to upload image!");
                 }
-            }).then(response => {
-                console.log(response, "two");
-                data.imageUrl = response.url.split("?", 1)[0];
+            }).then(result => {
+                console.log(result, "two");
+                data.imageUrl = result.url.split("?", 1)[0];
                 console.log(data, "two-one");
-                return fetch(response.url, { // save at the URL
+                return fetch(result.url, { // save at the URL
                     method: 'PUT', 
                     body: files[0],
                     headers: {
                         'Content-Type': files[0].type
                     }
                 });
-            }).then(response => {
-                console.log(response, "three");
+            }).then(result => {
+                console.log(result, "three");
                 console.log(data, "four");
-                if(response.ok) {
+                if(result.ok) {
                     return fetch('/admin/add-product', { // Save Product in Database
                         method: 'POST',
                         body: JSON.stringify(data),

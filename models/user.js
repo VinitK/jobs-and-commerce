@@ -65,8 +65,8 @@ const userSchema = new Schema({
     }
 }, {timestamps: true});
 
-userSchema.methods.addProduct = function(product) {
-    this.products.push(product)
+userSchema.methods.addProduct = function(productId) {
+    this.products.push(productId)
     return this.save();
 }
 

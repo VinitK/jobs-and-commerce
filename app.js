@@ -8,8 +8,7 @@ const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
 const flash = require('connect-flash');
-var multer = require('multer') // upload files
-const uuidv4 = require('uuidv4'); // for naming files with random characters
+// var multer = require('multer') // upload files
 const helmet = require('helmet'); // security middleware
 const compression = require('compression'); // middleware
 // const morgan = require('morgan'); // middleware
@@ -25,7 +24,7 @@ const shopRoutes = require('./routes/shop');
 const authRoutes = require('./routes/auth');
 const cvfyRoutes = require('./routes/cvfy');
 const apiRoutes = require('./routes/api');
-const apiUploads = require('./routes/upload');
+const uploadRoutes = require('./routes/upload');
 
 const MONGODB_URI =
   process.env.MONGODB_URI;
@@ -49,51 +48,42 @@ const store = new MongoDBStore({
 
 const csrfProtection = csrf();
 
-const fileStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    
-    if (file.fieldname === "resume") { // if uploading resume
-      cb(null, 'resumes');
-    } else { // else uploading image
-      cb(null, 'images');
-    }
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.fieldname+"-"+uuidv4()+path.extname(file.originalname))
-  }
-});
+// const fileStorage = multer.diskStorage({ destination: (req, file, cb) => {
+//   if (file.fieldname === "resume") { // if uploading resume
+//     cb(null, 'resumes');
+//   } else { // else uploading image
+//     cb(null, 'images');
+//   }
+// }, filename: (req, file, cb) => { cb(null, file.fieldname+"-"+uuidv4()+path.extname(file.originalname))}});
 
-const fileFilter = (req, file, cb) => {
-  if (file.fieldname === "resume") {
-    if (
-      file.mimetype === 'application/pdf' ||
-      file.mimetype === 'application/msword' ||
-      file.mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-    ) {
-      cb(null, true);
-    } else {
-      cb(null, false);
-    }
-  } else {
-    if (
-      file.mimetype === 'image/png' ||
-      file.mimetype === 'image/jpg' ||
-      file.mimetype === 'image/jpeg'
-    ) {
-      cb(null, true);
-    } else {
-      cb(null, false);
-    }
-  }
-};
+// const fileFilter = (req, file, cb) => {
+//   if (file.fieldname === "resume") {
+//     if (
+//       file.mimetype === 'application/pdf' ||
+//       file.mimetype === 'application/msword' ||
+//       file.mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+//     ) {
+//       cb(null, true);
+//     } else {
+//       cb(null, false);
+//     }
+//   } else {
+//     if (
+//       file.mimetype === 'image/png' ||
+//       file.mimetype === 'image/jpg' ||
+//       file.mimetype === 'image/jpeg'
+//     ) {
+//       cb(null, true);
+//     } else {
+//       cb(null, false);
+//     }
+//   }
+// };
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
-// const accessLogStream = fs.createWriteStream( // logging requests
-//   path.join(__dirname, 'access.log'), 
-//   { flags: 'a' }
-// );
+// const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' });
 
 app.use(helmet()); // security middleware
 app.use(compression()); // compressing code files middleware
@@ -101,29 +91,7 @@ app.use(compression()); // compressing code files middleware
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use(
-  multer(
-    { 
-      storage: fileStorage, 
-      limits:
-        { 
-          fileSize:'2mb' 
-        }, 
-      fileFilter: fileFilter 
-    }
-  ).fields(
-    [
-      { 
-        name: 'resume', 
-        maxCount: 1 
-      }, 
-      { 
-        name: 'image', 
-        maxCount: 1 
-      }
-    ]
-  )
-);
+// app.use(multer({ storage: fileStorage, limits: { fileSize:'2mb' }, fileFilter: fileFilter }).fields([{ name: 'resume', maxCount: 1 }, { name: 'image', maxCount: 1 }]));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -148,17 +116,21 @@ app.use((req, res, next) => {
 
 app.use((req, res, next) => {
     if (req.session.isLoggedIn) {
-        User.findById(req.session.loggedInUser._id)
-        .then(user => {
-            if (user) {
-              req.user = user;
-            }
-            next();
-        })
-        .catch(err => {
-          console.log(err);
-          next(new Error(err));
-        });
+      console.log("SESSION USER", req.session.loggedInUser);
+      User.findById(req.session.loggedInUser._id)
+      .populate('products')
+      .exec()
+      .then(user => {
+          if (user) {
+            console.log("CHECKING USER", user);
+            req.user = user;
+          }
+          next();
+      })
+      .catch(err => {
+        console.log(err);
+        next(new Error(err));
+      });
     } else {
       next();
     }
@@ -176,7 +148,7 @@ app.use((req, res, next) => {
 app.use('/admin', adminRoutes);
 app.use('/cvfy', cvfyRoutes);
 app.use('/api', apiRoutes);
-app.use('/upload', apiUploads);
+app.use('/upload', uploadRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
 

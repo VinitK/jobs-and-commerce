@@ -14,7 +14,7 @@ env.config(); // Remove in Heroku
 const s3 = new AWS.S3({
     accessKeyId: process.env.S3_ACCESS_KEY_ID,
     secretAccessKey: process.env.S3_SECRET_ACCESS_KEY
-})
+});
 
 // function to export
 exports.getImage = (req, res, next) => {
@@ -22,12 +22,16 @@ exports.getImage = (req, res, next) => {
 
     s3.getSignedUrl('putObject', 
         {
-            Bucket: 'weekay',
+            Bucket: process.env.S3_BUCKET,
             ContentType: 'image/jpeg',
             Key: key
         }, 
         (err, url) => {
-            return res.json({ key, url })
+            if (err) {
+                return res.json({message: "fail", error: err});
+            } else {
+                return res.json({ message: "success", url: url });
+            }
         }
     );
 }
