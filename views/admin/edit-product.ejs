@@ -19,14 +19,7 @@
         </div>
         <div class="card mt-4">
             <div class="card-body">
-        
-                <% if (errorMessage) { %>
-                    <div class="alert alert-warning" role="alert">
-                        <%= errorMessage %>
-                    </div>
-                <% } %>
-                
-                <form> <!-- <% if (editing==='true') { %>action="/admin/edit-product"<% } else { %>action="/admin/add-product"<% } %> method="POST" enctype="multipart/form-data" -->
+                <form>
                     <div class="form-group">
                         <label for="title">Title</label>
                         <input type="text" class="form-control" name="title" <% if (editing==='true' || hasError) { %>value="<%=product.title%>"<% } %> style="border-color: <%=validationErrors.find(e => e.param==='title') ? 'red;' : 'none;'%>">
@@ -48,6 +41,9 @@
                     <% } %>
                     <input type="hidden" name="_csrf" value=<%= csrfToken %>>
                     <!-- End Hidden Inputs -->
+                    <div class="alert alert-warning" role="alert" id="alert" <% if (!errorMessage) { %>hidden<% } %>>
+                        <%=errorMessage%>
+                    </div>
                     <div class="form-group">
                         <button type="button" onclick="submitProduct(this)" class="btn btn-primary"><% if (editing==='true') { %>Update<% } else { %>Save<% } %></button>
                         <a href="/admin/products" class="btn btn-secondary">Cancel</a>

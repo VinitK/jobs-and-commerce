@@ -55,7 +55,7 @@ exports.postSignup = (req, res, next) => {
         } else {
             crypto.randomBytes(32, (err, buffer) => {
                 if (err) {
-                    console.log(err);
+                    console.error(err);
                     req.flash('signupError', 'Something went wrong. Could not send verification mail. Please try again!');
                     return res.redirect('/signup');
                 } else {
@@ -165,7 +165,6 @@ exports.postLogin = (req, res, next) => {
             .populate('products')
             .exec()
             .then(user => {
-                console.log("LOGGING IN", user);
                 if (user) { // if user found
                     if (user.verified===true){ // if user email is verified
                         verifiedUser = user;
@@ -178,7 +177,6 @@ exports.postLogin = (req, res, next) => {
                 }
             }).then(result => {
                 if (result === true) {
-                    console.log("VERIFIED USER", verifiedUser)
                     req.session.loggedInUser = verifiedUser;
                     req.session.isLoggedIn = true;
                     req.session.save();
@@ -246,7 +244,7 @@ exports.postLogin = (req, res, next) => {
     } else {
         crypto.randomBytes(32, (err, buffer) => {
             if (err) {
-                console.log(err);
+                console.error(err);
                 req.flash('loginError', 'Something went wrong. Please try again!');
                 return res.redirect('/reset');
             
@@ -292,7 +290,7 @@ exports.postLogin = (req, res, next) => {
 exports.postLogout = (req, res, next) => {
     req.session.destroy((err) => {
         if (err) {
-            console.log(err);
+            console.error(err);
         }
         res.redirect('/login');
     });

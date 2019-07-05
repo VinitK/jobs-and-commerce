@@ -20,15 +20,15 @@ exports.getCvfy = (req, res, next) => {
 
 // function to export
 exports.postResume = async (req, res, next) => {
-    const resume = req.files['resume'];
-    if (resume) {
+    const resumeUrl = req.body.resumeUrl;
+    if (resumeUrl) {
         try {
-            req.user.resumeUrl = resume[0].path.replace("\\" ,"/");
+            req.user.resumeUrl = resumeUrl;
             await req.user.save();
             console.log('RESUME CREATED!');
             res.render('cvfy/cvfy', {
                 docTitle: 'CVFY',
-                resume: null,
+                resume: resumeUrl,
                 message: "Thank you for trusting in us! Our program begins to find relevant jobs for you. You will be mailed soon.",
                 errorMessage: null
             });

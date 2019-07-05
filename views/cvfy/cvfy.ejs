@@ -10,6 +10,7 @@
                 opacity: 0.7;
             }
         </style>
+        <script type="text/javascript" src="/js/cvfy.js"></script>
     </head>
     <body>
         <%-include('../includes/navigation.ejs')%>
@@ -36,21 +37,18 @@
                         <h5 class="card-title">Upload resume. That's it!</h5>
                         <p class="card-text">Simply upload your resume. Then sit back and relax. Our program will work on your behalf!</p>
                     <% } %>
-                <% if (errorMessage) { %>
-                    <div class="alert alert-danger" role="alert">
-                        <%= errorMessage %>
-                    </div>
-                <% } else { %>
                 <div class="pl-4 pr-4">
                     <img class="card-img-top pl-4 pr-4" src="https://freeicons.io/laravel/public/uploads/icons/png/3813347461559033170-256.png" alt="Card image cap">
                 </div>
-                <% } %>
-                <form action="/cvfy/resume" method="POST" enctype="multipart/form-data">
+                <form>
                     <div class="form-group">
                         <input type="file" class="form-control-file" name="resume" accept="application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document">
                     </div>
                     <input type="hidden" name="_csrf" value=<%= csrfToken %>>
-                    <button type="submit" class="btn btn-primary">Send</button>
+                    <div class="alert alert-warning" role="alert" id="alert" <% if (!errorMessage) { %>hidden<% } %>>
+                        <%=errorMessage%>
+                    </div>
+                    <button type="button" onclick="submitCV(this)" class="btn btn-primary">Send</button>
                 </form>
                 <% } %>
             </div>

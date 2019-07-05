@@ -53,24 +53,12 @@ exports.postAddProduct = (req, res, next) => {
             return req.user.addProduct(savedProduct._id);
         }).then(updatedUser => {
             console.log("PRODUCT CREATED");
-            res.status(200).json(updatedUser);
-        }).catch(err => console.error(err));
-    } else {
-        res.status(422).json({
-            url: 'admin/edit-product', 
-            data: { 
-                docTitle: 'Add Product',
-                editing: 'false',
-                product: {
-                    title: title,
-                    price: price,
-                    description: description
-                },
-                hasError: true,
-                errorMessage: errors.array()[0].msg,
-                validationErrors: errors.array()
-            }
+            return res.status(200).end();
+        }).catch(err => {
+            return res.status(422).send({errorMessage:err});
         });
+    } else {
+        return res.status(422).send({errorMessage:errors.array()[0].msg});
     }
 }
 
@@ -94,7 +82,7 @@ exports.getProducts = (req, res, next) => {
         if (page>lastPage) {
             res.redirect('/admin/products');
         } else {
-            res.render('admin/product-list', {
+            res.status(422).render('admin/product-list', {
                 docTitle: 'My Store',
                 products: products,
                 currentPage: page,
@@ -148,7 +136,7 @@ exports.postEditProduct = async (req, res, next) => {
     const errors = validationResult(req);
     if (errors.isEmpty()) {
         try {
-            const product = await Product.findById(req.body.productId)
+            const product = await Product.findById(req.body.productId);
             if (product.userId.toString() === req.user._id.toString()) {
                 product.title = req.body.title;
                 product.description = req.body.description;
@@ -157,37 +145,17 @@ exports.postEditProduct = async (req, res, next) => {
                 if (req.body.imageUrl) {
                     product.imageUrl = req.body.imageUrl;
                 }
-                // if (req.files) {
-                //     if(req.files['image']){
-                //         fileHelper.deleteFile(product.imageUrl);
-                //         product.imageUrl = req.files['image'][0].path.replace("\\","/");
-                //     }
-                // }
                 await product.save()
                 console.log("UPDATED PRODUCT");
-                res.redirect('/admin/products');
+                return res.status(200).end();
             } else {
-                res.redirect('/');
+                return res.status(422).send({errorMessage:"Not autheticated to take this action"});
             }
         } catch (err) {
-            const error = new Error(err);
-            error.httpStatusCode = 500;
-            return next(error);
+            return res.status(422).send({errorMessage:err});
         }
-    } else {
-        res.status(422).render('admin/edit-product', { 
-            docTitle: 'Edit Product',
-            editing: 'true',
-            product: {
-                title: updatedTitle,
-                price: updatedPrice,
-                description: updatedDescription,
-                _id: prodId
-            },
-            hasError: true,
-            errorMessage: errors.array()[0].msg,
-            validationErrors: errors.array()
-        });
+    } else { // else if errors then load the page with error info
+        return res.status(422).send({errorMessage:errors.array()[0].msg});
     }
 }
 
@@ -207,7 +175,6 @@ exports.deleteProduct = (req, res, next) => {
             user.removeFromCart(productId);
         });
     }).then(() => {
-        // fileHelper.deleteFile(foundProduct.imageUrl); // used with multer
         // START DELETE FROM S3
         const key = foundProduct.imageUrl.split('.com/')[1];
         console.log(key);
@@ -215,7 +182,7 @@ exports.deleteProduct = (req, res, next) => {
             Bucket: process.env.S3_BUCKET,
             Key: key
         }
-        return s3.deleteObject(params, function (err, data) {
+        return s3.deleteObject(params, function(err, data) {
             if (err) {
                 console.log(err, err.stack); // an error occurred
             } else {
